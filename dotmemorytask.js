@@ -524,9 +524,19 @@ function initializeExperiment() {
   jsPsych.run(timeline);
 }
 
-// Call initialization when DOM is ready
+// Call initialization when DOM and all dependencies are ready
+function waitForDependencies() {
+  if (typeof initJsPsych === 'undefined' || typeof jQuery === 'undefined') {
+    // Dependencies not yet loaded, try again in 100ms
+    setTimeout(waitForDependencies, 100);
+  } else {
+    // All dependencies are ready
+    initializeExperiment();
+  }
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeExperiment);
+  document.addEventListener('DOMContentLoaded', waitForDependencies);
 } else {
-  initializeExperiment();
+  waitForDependencies();
 }
