@@ -1,12 +1,67 @@
-<!-- HTML for Qualtrics Dot Memory Task Experiment -->
-<!-- This HTML loads jsPsych and the experiment JavaScript, providing a container for the experiment -->
-<!-- Paste this into the HTML view of your Qualtrics question -->
-
-<!-- Load jsPsych 8.2.3 library from jsDelivr CDN -->
-<script src="https://cdn.jsdelivr.net/gh/KeyboardCarnage/dot-memory-task@main/jspsych.js"></script>
-
-<!-- Load the experiment JavaScript from jsDelivr CDN -->
-<script src="https://cdn.jsdelivr.net/gh/KeyboardCarnage/dot-memory-task@main/dotmemorytask.js"></script>
-
-<!-- Container for the jsPsych experiment -->
-<div id="jspsych-content"></div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dot Memory Task</title>
+    <script>console.log("Beginning of library loading...")</script>
+    
+    <!-- Load jQuery (required for experiment) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Load jsPsych 8.2.3 library from jsDelivr CDN -->
+    <script src="https://cdn.jsdelivr.net/gh/KeyboardCarnage/dot-memory-task@main/jspsych.js"></script>
+    
+    <!-- Load jsPsych CSS -->
+    <link href="https://cdn.jsdelivr.net/gh/KeyboardCarnage/dot-memory-task@main/jspsych.css" rel="stylesheet" type="text/css" />
+    
+    <script>console.log("jsPsych library loaded")</script>
+    
+    <!-- Load the experiment JavaScript -->
+    <script src="https://cdn.jsdelivr.net/gh/KeyboardCarnage/dot-memory-task@main/dotmemorytask.js"></script>
+    
+    <script>console.log("End of library loading...")</script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+        }
+        #jspsych-content {
+            width: 100%;
+            min-height: 100vh;
+        }
+        .loading-message {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-message">
+        <p>The experiment is loading...</p>
+        <p style="font-size: 14px; color: #666;">If this message persists for more than 10 seconds, please contact support.</p>
+    </div>
+    
+    <!-- Container for the jsPsych experiment -->
+    <div id="jspsych-content"></div>
+    
+    <script>
+        console.log("Page initialization script running");
+        console.log("initJsPsych available:", typeof initJsPsych !== 'undefined');
+        console.log("jQuery available:", typeof jQuery !== 'undefined');
+        console.log("waitForDependencies available:", typeof waitForDependencies !== 'undefined');
+        
+        // Call initialization after a brief delay to ensure all scripts are loaded
+        setTimeout(function() {
+            console.log("Calling waitForDependencies");
+            if (typeof waitForDependencies !== 'undefined') {
+                waitForDependencies();
+            } else {
+                console.error("waitForDependencies not found!");
+            }
+        }, 500);
+    </script>
+</body>
+</html>
