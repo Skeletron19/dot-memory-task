@@ -104,12 +104,12 @@ const gridCSS = `<style>
   display: grid;
   grid-template-columns: repeat(3, 60px);
   grid-template-rows: repeat(3, 60px);
-  gap: 5px;
+  gap: 0px;
   margin: 20px auto;
   width: 200px;
 }
 .grid-cell {
-  border: 2px solid #000;
+  border: 1px solid #000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,7 +142,7 @@ const gridCSS = `<style>
   margin: 20px;
 }
 .button {
-  margin: 0 10px;
+  margin: 100px 10px;
   padding: 10px 20px;
   font-size: 18px;
 }
@@ -202,7 +202,7 @@ function createShuffledSequence(patterns, numTrials) {
 function initializeExperiment() {
   console.log("Initializing experiment...");
   
-  // Initialize jsPsych
+  // Initialise jsPsych
   const jsPsych = initJsPsych({
     display_element: 'jspsych-content',
     on_finish: function() {
