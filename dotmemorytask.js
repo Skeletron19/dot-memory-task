@@ -102,11 +102,11 @@ function createGridHTML(dots = [], clickable = false) {
 const gridCSS = `<style>
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 200px);
-  grid-template-rows: repeat(3, 200px);
+  grid-template-columns: repeat(3, 130px);
+  grid-template-rows: repeat(3, 130px);
   gap: 0px;
-  margin: 0px auto;
-  width: 600px;
+  margin: 10px auto;
+  width: 400px;
 }
 .grid-cell {
   border: 1px solid #000;
@@ -122,18 +122,18 @@ const gridCSS = `<style>
   background-color: #f0f0f0;
 }
 .dot {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   background-color: #000;
-  border-radius: 50%;
+  border-radius: 30%;
 }
 .fixation {
-  font-size: 150px;
+  font-size: 48px;
   text-align: center;
   margin: 50px;
 }
 .sentence {
-  font-size: 48px;
+  font-size: 36px;
   text-align: center;
   margin: 50px;
 }
@@ -144,10 +144,10 @@ const gridCSS = `<style>
 .button {
   margin: 0 10px;
   padding: 10px 20px;
-  font-size: 28px;
+  font-size: 24px;
 }
 .feedback {
-  font-size: 36px;
+  font-size: 24px;
   text-align: center;
   margin: 50px;
 }
@@ -334,21 +334,36 @@ function initializeExperiment() {
 
     // Sentence judgement
     timeline.push({
-      type: jsPsychHtmlKeyboardResponse,
+      type: jsPsychHtmlButtonResponse,
       stimulus: `<div class="sentence">${trial.sentence.text}</div>
                  <div class="buttons">
-                   <p>Press the buttons or F for True and J for False</p>
-                   <button class="button" onclick="jsPsych.pluginAPI.pressKey('f')">True</button>
-                   <button class="button" onclick="jsPsych.pluginAPI.pressKey('j')">False</button>
+                   <p>Click the buttons or press F for True and J for False</p>
                  </div>`,
-      choices: ['f', 'j'],
+      choices: ['True', 'False'],
+      button_html: '<button class="button">%choice%</button>',
       data: {
         sentence_type: trial.sentence.type,
         is_practice: true,
         block: 'practice'
       },
+      on_load: function() {
+        const keydownHandler = function(e) {
+          if (e.key.toLowerCase() === 'f') {
+            e.preventDefault();
+            document.querySelectorAll('.jspsych-btn')[0].click();
+          } else if (e.key.toLowerCase() === 'j') {
+            e.preventDefault();
+            document.querySelectorAll('.jspsych-btn')[1].click();
+          }
+        };
+        document.addEventListener('keydown', keydownHandler);
+        window.sentenceJudgementKeyHandler = keydownHandler;
+      },
       on_finish: function(data) {
-        data.sentence_response = data.response === 'f' ? 'True' : 'False';
+        if (window.sentenceJudgementKeyHandler) {
+          document.removeEventListener('keydown', window.sentenceJudgementKeyHandler);
+          delete window.sentenceJudgementKeyHandler;
+        }
       }
     });
 
@@ -386,23 +401,24 @@ function initializeExperiment() {
           cell.addEventListener('click', clickHandler);
         });
 
+        const numpadToGridMap = { '1': 7, '2': 8, '3': 9, '4': 4, '5': 5, '6': 6, '7': 1, '8': 2, '9': 3 };
         keydownHandler = function(e) {
-          const key = parseInt(e.key, 10);
-          if (key >= 1 && key <= 9) {
+          const gridPos = numpadToGridMap[e.key];
+          if (gridPos) {
             e.preventDefault();
-            const cell = document.querySelector(`.grid-cell[data-position="${key}"]`);
+            const cell = document.querySelector(`.grid-cell[data-position="${gridPos}"]`);
             if (cell) {
               const dot = cell.querySelector('.dot');
               if (dot) {
                 dot.remove();
-                const idx = selectedDots.indexOf(key);
+                const idx = selectedDots.indexOf(gridPos);
                 if (idx > -1) {
                   selectedDots.splice(idx, 1);
                 }
               } else {
                 cell.innerHTML = '<div class="dot"></div>';
-                if (!selectedDots.includes(key)) {
-                  selectedDots.push(key);
+                if (!selectedDots.includes(gridPos)) {
+                  selectedDots.push(gridPos);
                 }
               }
             }
@@ -502,19 +518,35 @@ function initializeExperiment() {
 
       // Sentence judgement
       timeline.push({
-        type: jsPsychHtmlKeyboardResponse,
+        type: jsPsychHtmlButtonResponse,
         stimulus: `<div class="sentence">${trial.sentence.text}</div>
                    <div class="buttons">
-                     <button class="button" onclick="jsPsych.pluginAPI.pressKey('f')">True</button>
-                     <button class="button" onclick="jsPsych.pluginAPI.pressKey('j')">False</button>
+                     <p>Click the buttons or press F for True and J for False</p>
                    </div>`,
-        choices: ['f', 'j'],
+        choices: ['True', 'False'],
+        button_html: '<button class="button">%choice%</button>',
         data: {
           sentence_type: trial.sentence.type,
           block: blockType
         },
+        on_load: function() {
+          const keydownHandler = function(e) {
+            if (e.key.toLowerCase() === 'f') {
+              e.preventDefault();
+              document.querySelectorAll('.jspsych-btn')[0].click();
+            } else if (e.key.toLowerCase() === 'j') {
+              e.preventDefault();
+              document.querySelectorAll('.jspsych-btn')[1].click();
+            }
+          };
+          document.addEventListener('keydown', keydownHandler);
+          window.sentenceJudgementKeyHandler = keydownHandler;
+        },
         on_finish: function(data) {
-          data.sentence_response = data.response === 'f' ? 'True' : 'False';
+          if (window.sentenceJudgementKeyHandler) {
+            document.removeEventListener('keydown', window.sentenceJudgementKeyHandler);
+            delete window.sentenceJudgementKeyHandler;
+          }
         }
       });
 
