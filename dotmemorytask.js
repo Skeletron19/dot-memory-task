@@ -100,6 +100,33 @@ function createGridHTML(dots = [], clickable = false) {
 
 // CSS for the grid
 const gridCSS = `<style>
+#jspsych-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.jspsych-display-element {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.jspsych-trial {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(3, 130px);
@@ -108,6 +135,7 @@ const gridCSS = `<style>
   margin: 10px auto;
   width: 400px;
 }
+
 .grid-cell {
   border: 1px solid #000;
   display: grid;
@@ -115,37 +143,76 @@ const gridCSS = `<style>
   justify-content: center;
   background-color: #fff;
 }
+
 .grid-cell.clickable {
   cursor: pointer;
 }
+
 .grid-cell.clickable:hover {
   background-color: #f0f0f0;
 }
+
 .dot {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   background-color: #000;
-  border-radius: 30%;
+  border-radius: 50%;
 }
+
 .fixation {
   font-size: 48px;
   text-align: center;
   margin: 50px;
 }
+
 .sentence {
   font-size: 36px;
   text-align: center;
   margin: 50px;
 }
+
 .buttons {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
   margin: 20px;
+  flex-wrap: wrap;
 }
+
+.buttons p {
+  width: 100%;
+  text-align: center;
+  margin: 10px 0;
+}
+
 .button {
   margin: 0 10px;
   padding: 10px 20px;
   font-size: 24px;
+  cursor: pointer;
 }
+
+.jspsych-btn {
+  cursor: pointer;
+  font-size: 24px;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 4px;
+}
+
+.jspsych-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.jspsych-btn-group.continue-buttons {
+  justify-content: flex-end;
+  margin-right: 20px;
+}
+
 .feedback {
   font-size: 24px;
   text-align: center;
