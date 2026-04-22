@@ -100,45 +100,110 @@ function createGridHTML(dots = [], clickable = false) {
 
 // CSS for the grid
 const gridCSS = `<style>
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 #jspsych-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: white;
 }
 
 .jspsych-display-element {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   min-height: 100vh;
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  padding: 40px 20px;
 }
 
 .jspsych-trial {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 
+/* Content area - everything except buttons */
+.trial-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+/* Instructions and prompts above content */
+.trial-instructions {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Button prompts below content */
+.trial-button-instructions {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 30px;
+  color: #666;
+}
+
+/* Fixation cross */
+.fixation {
+  font-size: 80px;
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Sentences */
+.sentence {
+  font-size: 36px;
+  text-align: center;
+  margin: 40px 0;
+  max-width: 800px;
+  line-height: 1.4;
+}
+
+/* Feedback messages */
+.feedback {
+  font-size: 28px;
+  text-align: center;
+  margin: 0;
+  color: #2d5016;
+}
+
+/* Grid for dot patterns */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 130px);
-  grid-template-rows: repeat(3, 130px);
-  gap: 0px;
-  margin: 10px auto;
-  width: 400px;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 0;
+  margin: 20px auto;
+  background-color: #fff;
 }
 
 .grid-cell {
-  border: 1px solid #000;
-  display: grid;
+  border: 2px solid #000;
+  display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fff;
@@ -149,74 +214,83 @@ const gridCSS = `<style>
 }
 
 .grid-cell.clickable:hover {
-  background-color: #f0f0f0;
+  background-color: #e0e0e0;
 }
 
 .dot {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   background-color: #000;
   border-radius: 50%;
 }
 
-.fixation {
-  font-size: 48px;
-  text-align: center;
-  margin: 50px;
+/* Buttons container - positioned at bottom */
+.jspsych-btn-group {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 600px;
 }
 
-.sentence {
-  font-size: 36px;
-  text-align: center;
-  margin: 50px;
+/* Single continue button - right aligned */
+.jspsych-btn-group.single-button {
+  justify-content: flex-end;
+  right: 30px;
+}
+
+/* Sentence judgment buttons - centered pair */
+.jspsych-btn-group.sentence-judgment {
+  position: static;
+  right: auto;
+  bottom: auto;
+  justify-content: center;
+  margin-top: 30px;
+  max-width: 100%;
+}
+
+/* Individual button styling */
+.jspsych-btn {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 12px 30px;
+  margin: 5px;
+  border: 2px solid #333;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  min-width: 120px;
+}
+
+.jspsych-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.jspsych-btn:active {
+  background-color: #d0d0d0;
+}
+
+/* Legacy button class */
+.button {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 12px 30px;
+  margin: 5px;
+  border: 2px solid #333;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #e0e0e0;
 }
 
 .buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px;
-  flex-wrap: wrap;
-}
-
-.buttons p {
-  width: 100%;
-  text-align: center;
-  margin: 10px 0;
-}
-
-.button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.jspsych-btn {
-  cursor: pointer;
-  font-size: 24px;
-  padding: 10px 20px;
-  margin: 5px;
-  border-radius: 4px;
-}
-
-.jspsych-btn-group {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-  flex-wrap: wrap;
-}
-
-.jspsych-btn-group.continue-buttons {
-  justify-content: flex-end;
-  margin-right: 20px;
-}
-
-.feedback {
-  font-size: 24px;
-  text-align: center;
-  margin: 50px;
+  display: none;
 }
 </style>`;
 
@@ -352,7 +426,7 @@ function initializeExperiment() {
     type: jsPsychHtmlButtonResponse,
     stimulus: '<div class="sentence">You will practice with some items before doing the actual experiment.</div>',
     choices: ['Start Practice'],
-    button_html: '<button class="button">%choice%</button>'
+      button_html: '<button class="jspsych-btn">%choice%</button>'
   });
 
   // Practice trials (3 trials)
@@ -363,18 +437,18 @@ function initializeExperiment() {
     // Fixation trial
     timeline.push({
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: '<div class="fixation">+</div>',
+      stimulus: '<div class="trial-content"><div class="fixation">+</div></div>',
       choices: "NO_KEYS",
-      trial_duration: 500
+      trial_duration: 1000
     });
 
     // Dot pattern display
     if (isFirstPractice) {
       timeline.push({
         type: jsPsychHtmlButtonResponse,
-        stimulus: createGridHTML(trial.pattern.dots) + '<p>Look at the pattern and memorise it. Press continue when ready.</p>',
+        stimulus: `<div class="trial-content"><div class="trial-instructions">Look at the pattern and memorise it.</div>${createGridHTML(trial.pattern.dots)}</div>`,
         choices: ['Continue'],
-        button_html: '<button class="button">%choice%</button>',
+        button_html: '<button class="jspsych-btn">%choice%</button>',
         data: { is_practice: true, block: 'practice' },
         on_finish: function(data) {
           data.pattern_type = trial.pattern.type;
@@ -386,7 +460,7 @@ function initializeExperiment() {
     } else {
       timeline.push({
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: createGridHTML(trial.pattern.dots),
+        stimulus: `<div class="trial-content">${createGridHTML(trial.pattern.dots)}</div>`,
         choices: "NO_KEYS",
         trial_duration: 850,
         data: { is_practice: true, block: 'practice' },
@@ -402,12 +476,12 @@ function initializeExperiment() {
     // Sentence judgement
     timeline.push({
       type: jsPsychHtmlButtonResponse,
-      stimulus: `<div class="sentence">${trial.sentence.text}</div>
-                 <div class="buttons">
-                   <p>Click the buttons or press F for True and J for False</p>
+      stimulus: `<div class="trial-content">
+                   <div class="sentence">${trial.sentence.text}</div>
+                   <div class="trial-button-instructions">Click True or False, or press F for True and J for False</div>
                  </div>`,
       choices: ['True', 'False'],
-      button_html: '<button class="button">%choice%</button>',
+      button_html: '<button class="jspsych-btn">%choice%</button>',
       data: {
         sentence_type: trial.sentence.type,
         is_practice: true,
@@ -437,10 +511,13 @@ function initializeExperiment() {
     // Dot pattern reproduction
     timeline.push({
       type: jsPsychHtmlButtonResponse,
-      stimulus: `<p>Please reproduce the dot pattern you saw earlier.</p>
-                 <p>Click on the grid or use your numpad (1-9) to place dots.</p>
-                 <p>Press continue when you are satisfied with the grid pattern.</p>
-                 ${createGridHTML([], true)}`,
+      stimulus: `<div class="trial-content">
+                   <div class="trial-instructions">
+                     <p>Reproduce the dot pattern you saw earlier.</p>
+                     <p>Click on the grid or use your numpad (1-9) to place dots.</p>
+                   </div>
+                   ${createGridHTML([], true)}
+                 </div>`,
       choices: ['Continue'],
       button_html: '<button class="button">%choice%</button>',
       data: { is_practice: true, block: 'practice' },
@@ -534,7 +611,7 @@ function initializeExperiment() {
     type: jsPsychHtmlButtonResponse,
     stimulus: '<div class="sentence">This concludes the practice trials.<br>The experiment will start now.</div>',
     choices: ['Start Experiment'],
-    button_html: '<button class="button">%choice%</button>'
+    button_html: '<button class="jspsych-btn">%choice%</button>'
   });
 
   // Experimental blocks
@@ -563,15 +640,15 @@ function initializeExperiment() {
       // Fixation
       timeline.push({
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: '<div class="fixation">+</div>',
+      stimulus: '<div class="trial-content"><div class="fixation">+</div></div>',
         choices: "NO_KEYS",
-        trial_duration: 500
+        trial_duration: 1000
       });
 
       // Dot pattern display
       timeline.push({
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: createGridHTML(trial.pattern.dots),
+        stimulus: `<div class="trial-content">${createGridHTML(trial.pattern.dots)}</div>`,
         choices: "NO_KEYS",
         trial_duration: 850,
         data: { block: blockType },
@@ -586,12 +663,12 @@ function initializeExperiment() {
       // Sentence judgement
       timeline.push({
         type: jsPsychHtmlButtonResponse,
-        stimulus: `<div class="sentence">${trial.sentence.text}</div>
-                   <div class="buttons">
-                     <p>Click the buttons or press F for True and J for False</p>
+        stimulus: `<div class="trial-content">
+                     <div class="sentence">${trial.sentence.text}</div>
+                     <div class="trial-button-instructions">Click True or False, or press F for True and J for False</div>
                    </div>`,
         choices: ['True', 'False'],
-        button_html: '<button class="button">%choice%</button>',
+        button_html: '<button class="jspsych-btn">%choice%</button>',
         data: {
           sentence_type: trial.sentence.type,
           block: blockType
@@ -620,9 +697,12 @@ function initializeExperiment() {
       // Dot pattern reproduction
       timeline.push({
         type: jsPsychHtmlButtonResponse,
-        stimulus: `${createGridHTML([], true)}`,
+        stimulus: `<div class="trial-content">
+                     <div class="trial-instructions">Reproduce the dot pattern</div>
+                     ${createGridHTML([], true)}
+                   </div>`,
         choices: ['Continue'],
-        button_html: '<button class="button">%choice%</button>',
+        button_html: '<button class="jspsych-btn">%choice%</button>',
         data: { block: blockType },
         on_load: function() {
           const selectedDots = [];
@@ -713,7 +793,7 @@ function initializeExperiment() {
         type: jsPsychHtmlButtonResponse,
         stimulus: '<div class="sentence">You are now halfway along this phase of the experiment and can take a short break.<br>Press continue when you are ready to proceed.</div>',
         choices: ['Continue'],
-        button_html: '<button class="button">%choice%</button>'
+        button_html: '<button class="jspsych-btn">%choice%</button>'
       });
     }
   }
