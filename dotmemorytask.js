@@ -98,19 +98,19 @@ function createGridHTML(dots = [], clickable = false) {
   return html;
 }
 
-// CSS for the grid (will be added to the page)
+// CSS for the grid
 const gridCSS = `<style>
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 60px);
-  grid-template-rows: repeat(3, 60px);
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
   gap: 0px;
-  margin: 20px auto;
-  width: 200px;
+  margin: 0px auto;
+  width: 600px;
 }
 .grid-cell {
   border: 1px solid #000;
-  display: flex;
+  display: grid;
   align-items: center;
   justify-content: center;
   background-color: #fff;
@@ -122,18 +122,18 @@ const gridCSS = `<style>
   background-color: #f0f0f0;
 }
 .dot {
-  width: 30px;
-  height: 30px;
+  width: 100px;
+  height: 100px;
   background-color: #000;
   border-radius: 50%;
 }
 .fixation {
-  font-size: 48px;
+  font-size: 150px;
   text-align: center;
   margin: 50px;
 }
 .sentence {
-  font-size: 24px;
+  font-size: 48px;
   text-align: center;
   margin: 50px;
 }
@@ -142,12 +142,12 @@ const gridCSS = `<style>
   margin: 20px;
 }
 .button {
-  margin: 100px 10px;
+  margin: 0 10px;
   padding: 10px 20px;
-  font-size: 18px;
+  font-size: 28px;
 }
 .feedback {
-  font-size: 24px;
+  font-size: 36px;
   text-align: center;
   margin: 50px;
 }
