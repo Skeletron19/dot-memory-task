@@ -461,6 +461,7 @@ function initializeExperiment() {
           data.pattern_dots = trial.pattern.dots;
           data.sentence_text = trial.sentence.text;
           data.sentence_type = trial.sentence.type;
+          window.currentPatternDots = trial.pattern.dots;
         }
       });
     } else {
@@ -475,6 +476,7 @@ function initializeExperiment() {
           data.pattern_dots = trial.pattern.dots;
           data.sentence_text = trial.sentence.text;
           data.sentence_type = trial.sentence.type;
+          window.currentPatternDots = trial.pattern.dots;
         }
       });
     }
@@ -585,8 +587,7 @@ function initializeExperiment() {
           delete window.currentKeydownHandler;
         }
         data.reproduced_dots = window.currentSelectedDots || [];
-        const lastTrial = jsPsych.data.get().last(1).values()[0];
-        const correct = lastTrial.pattern_dots || [];
+        const correct = window.currentPatternDots || [];
         const reproduced = data.reproduced_dots.sort((a, b) => a - b);
         const correctSorted = correct.sort((a, b) => a - b);
         data.reproduction_correct = JSON.stringify(reproduced) === JSON.stringify(correctSorted);
@@ -663,6 +664,7 @@ function initializeExperiment() {
           data.pattern_dots = trial.pattern.dots;
           data.sentence_text = trial.sentence.text;
           data.sentence_type = trial.sentence.type;
+          window.currentPatternDots = trial.pattern.dots;
         }
       });
 
@@ -765,8 +767,7 @@ function initializeExperiment() {
             delete window.currentKeydownHandler;
           }
           data.reproduced_dots = window.currentSelectedDots || [];
-          const lastTrial = jsPsych.data.get().last(1).values()[0];
-          const correct = lastTrial.pattern_dots || [];
+          const correct = window.currentPatternDots || [];
           const reproduced = data.reproduced_dots.sort((a, b) => a - b);
           const correctSorted = correct.sort((a, b) => a - b);
           data.reproduction_correct = JSON.stringify(reproduced) === JSON.stringify(correctSorted);
